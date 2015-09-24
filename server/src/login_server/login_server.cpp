@@ -17,6 +17,8 @@ string strMsfsUrl;
 string strDiscovery;//发现获取地址
 void client_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	if (msg == NETLIB_MSG_CONNECT)
 	{
 		CLoginConn* pConn = new CLoginConn();
@@ -26,11 +28,15 @@ void client_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pP
 	{
 		log("!!!error msg: %d ", msg);
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 // this callback will be replaced by imconn_callback() in OnConnect()
 void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
+	log("enter[%s]", __FUNCTION__);
+
     log("msg_server come in");
 
 	if (msg == NETLIB_MSG_CONNECT)
@@ -42,11 +48,15 @@ void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* 
 	{
 		log("!!!error msg: %d ", msg);
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 
 void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
+	log("enter[%s]", __FUNCTION__);
+
     if (msg == NETLIB_MSG_CONNECT)
     {
         CHttpConn* pConn = new CHttpConn();
@@ -56,10 +66,14 @@ void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pPar
     {
         log("!!!error msg: %d ", msg);
     }
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 int main(int argc, char* argv[])
 {
+	log("enter[%s]", __FUNCTION__);
+
     log("My Test");
 	if ((argc == 2) && (strcmp(argv[1], "-v") == 0)) {
 		printf("Server Version: LoginServer/%s\n", VERSION);
@@ -131,6 +145,8 @@ int main(int argc, char* argv[])
     writePid();
 
 	netlib_eventloop();
+
+	log("leave[%s]", __FUNCTION__);
 
 	return 0;
 }

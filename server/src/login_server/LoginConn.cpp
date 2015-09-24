@@ -18,6 +18,8 @@ map<uint32_t, msg_serv_info_t*> g_msg_serv_info;
 
 void login_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	uint64_t cur_time = get_tick_count();
 	for (ConnMap_t::iterator it = g_client_conn_map.begin(); it != g_client_conn_map.end(); ) {
 		ConnMap_t::iterator it_old = it;
@@ -34,24 +36,38 @@ void login_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle
 		CLoginConn* pConn = (CLoginConn*)it_old->second;
 		pConn->OnTimer(cur_time);
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void init_login_conn()
 {
+	log("enter[%s]", __FUNCTION__);
 	netlib_register_timer(login_conn_timer_callback, NULL, 1000);
+	log("leave[%s]", __FUNCTION__);
 }
 
 CLoginConn::CLoginConn()
 {
+	log("enter[%s]", __FUNCTION__);
+
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 CLoginConn::~CLoginConn()
 {
 
+	log("enter[%s]", __FUNCTION__);
+	log("leave[%s]", __FUNCTION__);
+
+
 }
 
 void CLoginConn::Close()
 {
+	log("enter[%s]", __FUNCTION__);
+
 	if (m_handle != NETLIB_INVALID_HANDLE) {
 		netlib_close(m_handle);
 		if (m_conn_type == LOGIN_CONN_TYPE_CLIENT) {
@@ -73,10 +89,14 @@ void CLoginConn::Close()
 	}
 
 	ReleaseRef();
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CLoginConn::OnConnect2(net_handle_t handle, int conn_type)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	m_handle = handle;
 	m_conn_type = conn_type;
 	ConnMap_t* conn_map = &g_msg_serv_conn_map;
@@ -88,15 +108,23 @@ void CLoginConn::OnConnect2(net_handle_t handle, int conn_type)
 
 	netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)imconn_callback);
 	netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, (void*)conn_map);
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CLoginConn::OnClose()
 {
+	log("enter[%s]", __FUNCTION__);
+
 	Close();
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CLoginConn::OnTimer(uint64_t curr_tick)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	if (m_conn_type == LOGIN_CONN_TYPE_CLIENT) {
 		if (curr_tick > m_last_recv_tick + CLIENT_TIMEOUT) {
 			Close();
@@ -116,10 +144,14 @@ void CLoginConn::OnTimer(uint64_t curr_tick)
 			Close();
 		}
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CLoginConn::HandlePdu(CImPdu* pPdu)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	switch (pPdu->GetCommandId()) {
         case CID_OTHER_HEARTBEAT:
             break;
@@ -137,10 +169,14 @@ void CLoginConn::HandlePdu(CImPdu* pPdu)
             log("wrong msg, cmd id=%d ", pPdu->GetCommandId());
             break;
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CLoginConn::_HandleMsgServInfo(CImPdu* pPdu)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	msg_serv_info_t* pMsgServInfo = new msg_serv_info_t;
     IM::Server::IMMsgServInfo msg;
     msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength());
@@ -159,10 +195,14 @@ void CLoginConn::_HandleMsgServInfo(CImPdu* pPdu)
 		"hostname: %s. ",
 		pMsgServInfo->ip_addr1.c_str(), pMsgServInfo->ip_addr2.c_str(), pMsgServInfo->port,pMsgServInfo->max_conn_cnt,
 		pMsgServInfo->cur_conn_cnt, pMsgServInfo->hostname.c_str());
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	map<uint32_t, msg_serv_info_t*>::iterator it = g_msg_serv_info.find(m_handle);
 	if (it != g_msg_serv_info.end()) {
 		msg_serv_info_t* pMsgServInfo = it->second;
@@ -181,10 +221,14 @@ void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu)
 		log("%s:%d, cur_cnt=%u, total_cnt=%u ", pMsgServInfo->hostname.c_str(),
             pMsgServInfo->port, pMsgServInfo->cur_conn_cnt, g_total_online_user_cnt);
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CLoginConn::_HandleMsgServRequest(CImPdu* pPdu)
 {
+	log("enter[%s]", __FUNCTION__);
+
     IM::Login::IMMsgServReq msg;
     msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength());
 
@@ -246,4 +290,6 @@ void CLoginConn::_HandleMsgServRequest(CImPdu* pPdu)
     }
 
 	Close();	// after send MsgServResponse, active close the connection
+	log("leave[%s]", __FUNCTION__);
+
 }

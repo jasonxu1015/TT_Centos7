@@ -24,17 +24,23 @@ static uint32_t g_conn_handle_generator = 0;
 
 CHttpConn* FindHttpConnByHandle(uint32_t conn_handle)
 {
+	log("enter[%s]", __FUNCTION__);
+
     CHttpConn* pConn = NULL;
     HttpConnMap_t::iterator it = g_http_conn_map.find(conn_handle);
     if (it != g_http_conn_map.end()) {
         pConn = it->second;
     }
 
+	log("leave[%s]", __FUNCTION__);
+
     return pConn;
 }
 
 void httpconn_callback(void* callback_data, uint8_t msg, uint32_t handle, uint32_t uParam, void* pParam)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	NOTUSED_ARG(uParam);
 	NOTUSED_ARG(pParam);
 
@@ -60,10 +66,15 @@ void httpconn_callback(void* callback_data, uint8_t msg, uint32_t handle, uint32
 		log("!!!httpconn_callback error msg: %d ", msg);
 		break;
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void http_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
+
+	log("enter[%s]", __FUNCTION__);
+
 	CHttpConn* pConn = NULL;
 	HttpConnMap_t::iterator it, it_old;
 	uint64_t cur_time = get_tick_count();
@@ -75,16 +86,24 @@ void http_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle,
 		pConn = it_old->second;
 		pConn->OnTimer(cur_time);
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void init_http_conn()
 {
+	log("enter[%s]", __FUNCTION__);
+
 	netlib_register_timer(http_conn_timer_callback, NULL, 1000);
+
+	log("leave[%s]", __FUNCTION__);
 }
 
 //////////////////////////
 CHttpConn::CHttpConn()
 {
+	log("enter[%s]", __FUNCTION__);
+
 	m_busy = false;
 	m_sock_handle = NETLIB_INVALID_HANDLE;
     m_state = CONN_STATE_IDLE;
@@ -96,15 +115,22 @@ CHttpConn::CHttpConn()
 	}
 
 	//log("CHttpConn, handle=%u\n", m_conn_handle);
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 CHttpConn::~CHttpConn()
 {
+	log("enter[%s]", __FUNCTION__);
+	log("leave[%s]", __FUNCTION__);
+
 	//log("~CHttpConn, handle=%u\n", m_conn_handle);
 }
 
 int CHttpConn::Send(void* data, int len)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	m_last_send_tick = get_tick_count();
 
 	if (m_busy)
@@ -128,21 +154,29 @@ int CHttpConn::Send(void* data, int len)
         OnWriteComlete();
     }
 
+	log("leave[%s]", __FUNCTION__);
 	return len;
+
 }
 
 void CHttpConn::Close()
 {
+	log("enter[%s]", __FUNCTION__);
+
     m_state = CONN_STATE_CLOSED;
     
     g_http_conn_map.erase(m_conn_handle);
     netlib_close(m_sock_handle);
 
     ReleaseRef();
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CHttpConn::OnConnect(net_handle_t handle)
 {
+	log("enter[%s]", __FUNCTION__);
+
     printf("OnConnect, handle=%d\n", handle);
     m_sock_handle = handle;
     m_state = CONN_STATE_CONNECTED;
@@ -151,10 +185,14 @@ void CHttpConn::OnConnect(net_handle_t handle)
     netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)httpconn_callback);
     netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, reinterpret_cast<void *>(m_conn_handle) );
     netlib_option(handle, NETLIB_OPT_GET_REMOTE_IP, (void*)&m_peer_ip);
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CHttpConn::OnRead()
 {
+	log("enter[%s]", __FUNCTION__);
+
 	for (;;)
 	{
 		uint32_t free_buf_len = m_in_buf.GetAllocSize() - m_in_buf.GetWriteOffset();
@@ -199,10 +237,14 @@ void CHttpConn::OnRead()
 			Close();
 		}
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CHttpConn::OnWrite()
 {
+	log("enter[%s]", __FUNCTION__);
+
 	if (!m_busy)
 		return;
 
@@ -224,24 +266,36 @@ void CHttpConn::OnWrite()
         OnWriteComlete();
 		m_busy = false;
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CHttpConn::OnClose()
 {
+	log("enter[%s]", __FUNCTION__);
+
     Close();
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 void CHttpConn::OnTimer(uint64_t curr_tick)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	if (curr_tick > m_last_recv_tick + HTTP_CONN_TIMEOUT) {
 		log("HttpConn timeout, handle=%d ", m_conn_handle);
 		Close();
 	}
+	log("leave[%s]", __FUNCTION__);
+
 }
 
 // Add By Lanhu 2014-12-19 通过登陆IP来优选电信还是联通IP
 void CHttpConn::_HandleMsgServRequest(string& url, string& post_data)
 {
+	log("enter[%s]", __FUNCTION__);
+
     msg_serv_info_t* pMsgServInfo;
     uint32_t min_user_cnt = (uint32_t)-1;
     map<uint32_t, msg_serv_info_t*>::iterator it_min_conn = g_msg_serv_info.end();
@@ -307,11 +361,18 @@ void CHttpConn::_HandleMsgServRequest(string& url, string& post_data)
         delete [] szContent;
         return;
     }
+	log("leave[%s]", __FUNCTION__);
+
 }
+
 
 void CHttpConn::OnWriteComlete()
 {
+	log("enter[%s]", __FUNCTION__);
+
     log("write complete ");
     Close();
+	log("leave[%s]", __FUNCTION__);
+
 }
 
