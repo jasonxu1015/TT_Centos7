@@ -12,9 +12,9 @@
 #include "public_define.h"
 using namespace IM::BaseDefine;
 static ConnMap_t g_client_conn_map;
-static ConnMap_t g_msg_serv_conn_map;
+static ConnMap_t g_msg_serv_conn_map;//这两个map关联的是socket和CImConn ,使用的是hash表
 static uint32_t g_total_online_user_cnt = 0;	// 并发在线总人数
-map<uint32_t, msg_serv_info_t*> g_msg_serv_info;
+map<uint32_t, msg_serv_info_t*> g_msg_serv_info;//保存了消息服务器的信息和相应的socket
 
 void login_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
@@ -43,6 +43,8 @@ void login_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle
 void init_login_conn()
 {
 	log("enter[%s]", __FUNCTION__);
+	//定时器的触发在 StartDispatch(uint32_t wait_timeout),里面，由epoll_wait控制最小的触发间隔，由_CheckTimer
+	//去判断是否有定时器需要触发回调函数
 	netlib_register_timer(login_conn_timer_callback, NULL, 1000);
 	log("leave[%s]", __FUNCTION__);
 }
@@ -104,9 +106,11 @@ void CLoginConn::OnConnect2(net_handle_t handle, int conn_type)
 		conn_map = &g_client_conn_map;
 	}else
 
+	//使用一个map，把socket和对应的CIMConn映射起来
 	conn_map->insert(make_pair(handle, this));
 
-	netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)imconn_callback);
+	//将新连接进来的msgserver的socketbase，重新赋值回调函数和回调参数,
+	netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)imconn_callback);//这个回调函数是会调用到基类CImConn的虚函数
 	netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, (void*)conn_map);
 	log("leave[%s]", __FUNCTION__);
 
@@ -130,12 +134,13 @@ void CLoginConn::OnTimer(uint64_t curr_tick)
 			Close();
 		}
 	} else {
-		if (curr_tick > m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {
+		if (curr_tick > m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {//每隔5s就给msg_server发送一个心跳包
             IM::Other::IMHeartBeat msg;
             CImPdu pdu;
             pdu.SetPBMsg(&msg);
             pdu.SetServiceId(SID_OTHER);
             pdu.SetCommandId(CID_OTHER_HEARTBEAT);
+			log("Send HeartBeat To MsgServer");
 			SendPdu(&pdu);
 		}
 

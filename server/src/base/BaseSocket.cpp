@@ -175,6 +175,7 @@ void CBaseSocket::OnRead()
 		}
 		else
 		{
+			//有没有此处的回调会调到msg_serv_callback而不是imconn_callback
 			m_callback(m_callback_data, NETLIB_MSG_READ, (net_handle_t)m_socket, NULL);
 		}
 	}
@@ -329,6 +330,7 @@ void CBaseSocket::_AcceptNewSocket()
 		log("AcceptNewSocket, socket=%d from %s:%d\n", fd, ip_str, port);
 
 		pSocket->SetSocket(fd);
+		//??为什么要给这个新连接进来的socket设置回调函数呢？此时这个回调函数应该还是msg_serv_callback，不是imconn_callback
 		pSocket->SetCallback(m_callback);
 		pSocket->SetCallbackData(m_callback_data);
 		pSocket->SetState(SOCKET_STATE_CONNECTED);
@@ -339,6 +341,7 @@ void CBaseSocket::_AcceptNewSocket()
 		_SetNonblock(fd);
 		AddBaseSocket(pSocket);
 		CEventDispatch::Instance()->AddEvent(fd, SOCKET_READ | SOCKET_EXCEP);
+		//开始调用回调函数
 		m_callback(m_callback_data, NETLIB_MSG_CONNECT, (net_handle_t)fd, NULL);
 	}
 }

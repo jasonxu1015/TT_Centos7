@@ -120,14 +120,16 @@ int CImConn::Send(void* data, int len)
 	return len;
 }
 
+//负责读取数据，然后调用HandlePdu,HandlePdu是虚函数，由子类定义具体业务处理
 void CImConn::OnRead()
 {
-	for (;;)
+	for (;;)//循环读取数据，直到socket 读完
 	{
 		uint32_t free_buf_len = m_in_buf.GetAllocSize() - m_in_buf.GetWriteOffset();
 		if (free_buf_len < READ_BUF_SIZE)
 			m_in_buf.Extend(READ_BUF_SIZE);
 
+		//这里类里只对应了一个连接，所以不用加锁
 		int ret = netlib_recv(m_handle, m_in_buf.GetBuffer() + m_in_buf.GetWriteOffset(), READ_BUF_SIZE);
 		if (ret <= 0)
 			break;
@@ -135,6 +137,7 @@ void CImConn::OnRead()
 		m_recv_bytes += ret;
 		m_in_buf.IncWriteOffset(ret);
 
+		//更新收到最后一个报文的时间，心跳判断里面需要用到
 		m_last_recv_tick = get_tick_count();
 	}
 
