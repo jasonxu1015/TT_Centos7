@@ -1,0 +1,20 @@
+#/bin/sh
+
+./restart.sh db_proxy_server
+sleep 1
+./restart.sh route_server
+sleep 1
+./restart.sh file_server
+sleep 1
+./restart.sh msfs
+sleep 1
+./restart.sh login_server
+sleep 1
+./restart.sh msg_server
+sleep 1
+./restart.sh http_msg_server
+sleep 1
+./restart.sh push_server
+sleep 1
+
+echo "finish"

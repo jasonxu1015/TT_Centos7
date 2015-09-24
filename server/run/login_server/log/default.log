@@ -1,0 +1,37 @@
+2015-09-23 23:39:29,073 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 192.168.1.199:8008
+2015-09-23 23:39:29,073 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 192.168.1.199:8100
+2015-09-23 23:39:29,073 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 192.168.1.199:8080
+2015-09-23 23:39:30,134 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=9 from 192.168.1.199:40814
+
+2015-09-23 23:39:30,134 [INFO  IM] - <login_server.cpp>|<34>|<msg_serv_callback>,msg_server come in
+2015-09-23 23:39:30,134 [INFO  IM] - <LoginConn.cpp>|<161>|<_HandleMsgServInfo>,MsgServInfo, ip_addr1=192.168.1.199, ip_addr2=192.168.1.199, port=8000, max_conn_cnt=100000, cur_conn_cnt=0, hostname: localhost.localdomain. 
+2015-09-23 23:44:56,063 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=10 from 192.168.1.101:52637
+
+2015-09-23 23:44:56,067 [INFO  IM] - <HttpConn.cpp>|<314>|<OnWriteComlete>,write complete 
+2015-09-23 23:44:56,503 [INFO  IM] - <LoginConn.cpp>|<182>|<_HandleUserCntUpdate>,localhost.localdomain:8000, cur_cnt=1, total_cnt=1 
+2015-09-23 23:46:27,229 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=10 from 192.168.1.102:6772
+
+2015-09-23 23:46:38,188 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=10 from 192.168.1.102:6775
+
+2015-09-23 23:46:43,194 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=10 from 192.168.1.102:6776
+
+2015-09-23 23:47:41,181 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=10 from 192.168.1.102:6794
+
+2015-09-23 23:47:45,611 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=10 from 192.168.1.102:6797
+
+2015-09-23 23:48:46,101 [INFO  IM] - <HttpConn.cpp>|<237>|<OnTimer>,HttpConn timeout, handle=6 
+2015-09-23 23:49:38,034 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=10 from 192.168.1.102:6848
+
+2015-09-23 23:50:41,951 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=10 from 192.168.1.102:6887
+
+2015-09-23 23:58:51,144 [INFO  IM] - <LoginConn.cpp>|<182>|<_HandleUserCntUpdate>,localhost.localdomain:8000, cur_cnt=0, total_cnt=0 
+2015-09-23 23:58:51,369 [INFO  IM] - <LoginConn.cpp>|<182>|<_HandleUserCntUpdate>,localhost.localdomain:8000, cur_cnt=1, total_cnt=1 
+2015-09-24 00:00:30,290 [INFO  IM] - <LoginConn.cpp>|<182>|<_HandleUserCntUpdate>,localhost.localdomain:8000, cur_cnt=0, total_cnt=0 
+2015-09-24 00:27:06,434 [INFO  IM] - <login_server.cpp>|<63>|<main>,My Test
+2015-09-24 00:27:06,453 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 192.168.1.199:8008
+2015-09-24 00:27:06,453 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 192.168.1.199:8100
+2015-09-24 00:27:06,453 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 192.168.1.199:8080
+2015-09-24 00:27:07,590 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=9 from 192.168.1.199:40958
+
+2015-09-24 00:27:07,590 [INFO  IM] - <login_server.cpp>|<34>|<msg_serv_callback>,msg_server come in
+2015-09-24 00:27:07,590 [INFO  IM] - <LoginConn.cpp>|<161>|<_HandleMsgServInfo>,MsgServInfo, ip_addr1=192.168.1.199, ip_addr2=192.168.1.199, port=8000, max_conn_cnt=100000, cur_conn_cnt=0, hostname: localhost.localdomain. 

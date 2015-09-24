@@ -1,0 +1,16 @@
+2015-09-23 23:39:27,001 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 0.0.0.0:8600
+2015-09-23 23:39:27,002 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 127.0.0.1:8601
+2015-09-23 23:39:30,133 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=8 from 192.168.1.199:44278
+
+2015-09-23 23:39:30,133 [INFO  IM] - <BaseSocket.cpp>|<228>|<SetSendBufSize>,socket=8 send_buf_size=262144
+2015-09-23 23:39:30,133 [INFO  IM] - <BaseSocket.cpp>|<241>|<SetRecvBufSize>,socket=8 recv_buf_size=262144
+2015-09-23 23:39:30,133 [INFO  IM] - <file_client_conn.cpp>|<214>|<HandlePdu>,no such cmd id: 1843
+2015-09-24 00:25:43,931 [INFO  IM] - <file_client_conn.cpp>|<169>|<OnClose>,client onclose: handle=8
+2015-09-24 00:25:43,931 [INFO  IM] - <file_client_conn.cpp>|<71>|<Close>,close client, handle 8
+2015-09-24 00:27:04,415 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 0.0.0.0:8600
+2015-09-24 00:27:04,416 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 127.0.0.1:8601
+2015-09-24 00:27:07,590 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=8 from 192.168.1.199:44422
+
+2015-09-24 00:27:07,590 [INFO  IM] - <BaseSocket.cpp>|<228>|<SetSendBufSize>,socket=8 send_buf_size=262144
+2015-09-24 00:27:07,590 [INFO  IM] - <BaseSocket.cpp>|<241>|<SetRecvBufSize>,socket=8 recv_buf_size=262144
+2015-09-24 00:27:07,590 [INFO  IM] - <file_client_conn.cpp>|<214>|<HandlePdu>,no such cmd id: 1843

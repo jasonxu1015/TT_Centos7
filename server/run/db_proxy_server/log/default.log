@@ -1,0 +1,107 @@
+2015-09-23 23:39:25,361 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: unread, list size: 2
+2015-09-23 23:39:25,362 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: group_set, list size: 2
+2015-09-23 23:39:25,363 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: token, list size: 2
+2015-09-23 23:39:25,363 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: sync, list size: 2
+2015-09-23 23:39:25,364 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: group_member, list size: 2
+2015-09-23 23:39:25,370 [INFO  IM] - <DBPool.cpp>|<334>|<Init>,db pool: teamtalk_master, size: 2
+2015-09-23 23:39:25,372 [INFO  IM] - <DBPool.cpp>|<334>|<Init>,db pool: teamtalk_slave, size: 2
+2015-09-23 23:39:25,376 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 192.168.1.199:10600
+2015-09-23 23:39:30,133 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=21 from 192.168.1.199:58841
+
+2015-09-23 23:39:30,134 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58841, handle=21
+2015-09-23 23:39:30,134 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=22 from 192.168.1.199:58842
+
+2015-09-23 23:39:30,134 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58842, handle=22
+2015-09-23 23:39:30,134 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=23 from 192.168.1.199:58843
+
+2015-09-23 23:39:30,134 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58843, handle=23
+2015-09-23 23:39:30,134 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=24 from 192.168.1.199:58844
+
+2015-09-23 23:39:30,134 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58844, handle=24
+2015-09-23 23:39:31,183 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=25 from 192.168.1.199:58848
+
+2015-09-23 23:39:31,183 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58848, handle=25
+2015-09-23 23:39:31,183 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=26 from 192.168.1.199:58849
+
+2015-09-23 23:39:31,183 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58849, handle=26
+2015-09-23 23:39:31,183 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=27 from 192.168.1.199:58850
+
+2015-09-23 23:39:31,183 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58850, handle=27
+2015-09-23 23:39:31,183 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=28 from 192.168.1.199:58851
+
+2015-09-23 23:39:31,183 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58851, handle=28
+2015-09-23 23:39:31,183 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=29 from 192.168.1.199:58852
+
+2015-09-23 23:39:31,183 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58852, handle=29
+2015-09-23 23:39:31,183 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=30 from 192.168.1.199:58853
+
+2015-09-23 23:39:31,183 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58853, handle=30
+2015-09-23 23:39:31,183 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=31 from 192.168.1.199:58854
+
+2015-09-23 23:39:31,183 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58854, handle=31
+2015-09-23 23:39:31,183 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=32 from 192.168.1.199:58855
+
+2015-09-23 23:39:31,183 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58855, handle=32
+2015-09-23 23:44:56,491 [INFO  IM] - <Login.cpp>|<92>|<doLogin>,yang2 request login.
+2015-09-23 23:44:56,514 [INFO  IM] - <DepartModel.cpp>|<58>|<getDepts>,list is empty
+2015-09-23 23:44:56,514 [INFO  IM] - <DepartAction.cpp>|<43>|<getChgedDepart>,userId=5, last_update=1443019783, cnt=0
+2015-09-23 23:44:56,517 [INFO  IM] - <UserModel.cpp>|<83>|<getUsers>,list is empty
+2015-09-23 23:44:56,517 [INFO  IM] - <UserAction.cpp>|<115>|<getChangedUser>,userId=5,nLastUpdate=1443022765, last_time=1443019783, userCnt=0
+2015-09-23 23:44:56,518 [INFO  IM] - <GroupAction.cpp>|<115>|<getNormalGroupList>,getNormalGroupList. userId=5, count=0
+2015-09-23 23:44:56,520 [INFO  IM] - <RecentSession.cpp>|<64>|<getRecentSession>,userId=5, last_time=1443020530, count=0
+2015-09-23 23:44:56,522 [INFO  IM] - <MessageCounter.cpp>|<57>|<getUnreadMsgCounter>,userId=5, unreadCnt=0, totalCount=0
+2015-09-23 23:58:51,357 [INFO  IM] - <Login.cpp>|<92>|<doLogin>,yang2 request login.
+2015-09-23 23:58:51,394 [INFO  IM] - <DepartModel.cpp>|<58>|<getDepts>,list is empty
+2015-09-23 23:58:51,394 [INFO  IM] - <DepartAction.cpp>|<43>|<getChgedDepart>,userId=5, last_update=1443019783, cnt=0
+2015-09-23 23:58:51,398 [INFO  IM] - <GroupAction.cpp>|<115>|<getNormalGroupList>,getNormalGroupList. userId=5, count=0
+2015-09-23 23:58:51,398 [INFO  IM] - <UserModel.cpp>|<83>|<getUsers>,list is empty
+2015-09-23 23:58:51,398 [INFO  IM] - <UserAction.cpp>|<115>|<getChangedUser>,userId=5,nLastUpdate=1443022765, last_time=1443019783, userCnt=0
+2015-09-23 23:58:51,401 [INFO  IM] - <RecentSession.cpp>|<64>|<getRecentSession>,userId=5, last_time=1443020530, count=0
+2015-09-23 23:58:51,403 [INFO  IM] - <MessageCounter.cpp>|<57>|<getUnreadMsgCounter>,userId=5, unreadCnt=0, totalCount=0
+2015-09-24 00:00:26,351 [INFO  IM] - <UserAction.cpp>|<64>|<getUserInfo>,userId=5, userCnt=1
+2015-09-24 00:00:30,292 [INFO  IM] - <MessageCounter.cpp>|<136>|<setDevicesToken>,setDeviceToken. userId=5, deviceToken=
+2015-09-24 00:00:30,292 [INFO  IM] - <MessageCounter.cpp>|<144>|<setDevicesToken>,setDeviceToken. userId=5, deviceToken=
+2015-09-24 00:27:02,198 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: unread, list size: 2
+2015-09-24 00:27:02,199 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: group_set, list size: 2
+2015-09-24 00:27:02,199 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: token, list size: 2
+2015-09-24 00:27:02,199 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: sync, list size: 2
+2015-09-24 00:27:02,199 [INFO  IM] - <CachePool.cpp>|<597>|<Init>,cache pool: group_member, list size: 2
+2015-09-24 00:27:02,271 [INFO  IM] - <DBPool.cpp>|<334>|<Init>,db pool: teamtalk_master, size: 2
+2015-09-24 00:27:02,273 [INFO  IM] - <DBPool.cpp>|<334>|<Init>,db pool: teamtalk_slave, size: 2
+2015-09-24 00:27:02,279 [INFO  IM] - <BaseSocket.cpp>|<81>|<Listen>,CBaseSocket::Listen on 192.168.1.199:10600
+2015-09-24 00:27:07,590 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=21 from 192.168.1.199:58985
+
+2015-09-24 00:27:07,590 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58985, handle=21
+2015-09-24 00:27:07,590 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=22 from 192.168.1.199:58986
+
+2015-09-24 00:27:07,590 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58986, handle=22
+2015-09-24 00:27:07,590 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=23 from 192.168.1.199:58987
+
+2015-09-24 00:27:07,590 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58987, handle=23
+2015-09-24 00:27:07,590 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=24 from 192.168.1.199:58988
+
+2015-09-24 00:27:07,590 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58988, handle=24
+2015-09-24 00:27:08,688 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=25 from 192.168.1.199:58992
+
+2015-09-24 00:27:08,688 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58992, handle=25
+2015-09-24 00:27:08,688 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=26 from 192.168.1.199:58993
+
+2015-09-24 00:27:08,688 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58993, handle=26
+2015-09-24 00:27:08,688 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=27 from 192.168.1.199:58994
+
+2015-09-24 00:27:08,688 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58994, handle=27
+2015-09-24 00:27:08,688 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=28 from 192.168.1.199:58995
+
+2015-09-24 00:27:08,688 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58995, handle=28
+2015-09-24 00:27:08,688 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=29 from 192.168.1.199:58996
+
+2015-09-24 00:27:08,688 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58996, handle=29
+2015-09-24 00:27:08,688 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=30 from 192.168.1.199:58997
+
+2015-09-24 00:27:08,688 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58997, handle=30
+2015-09-24 00:27:08,688 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=31 from 192.168.1.199:58998
+
+2015-09-24 00:27:08,688 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58998, handle=31
+2015-09-24 00:27:08,688 [INFO  IM] - <BaseSocket.cpp>|<329>|<_AcceptNewSocket>,AcceptNewSocket, socket=32 from 192.168.1.199:58999
+
+2015-09-24 00:27:08,688 [INFO  IM] - <ProxyConn.cpp>|<141>|<OnConnect>,connect from 192.168.1.199:58999, handle=32
