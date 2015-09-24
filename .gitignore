@@ -27,4 +27,16 @@
 *.out
 *.app
 
+# Others
+TeamTalk_Ceontos7_64bit.opensdf
+TeamTalk_Ceontos7_64bit.sdf
+TeamTalk_Ceontos7_64bit.sln
+TeamTalk_Ceontos7_64bit.v11.suo
+TeamTalk_Ceontos7_64bit.vcxproj
+TeamTalk_Ceontos7_64bit.vcxproj.filters
+TeamTalk_Ceontos7_64bit.vcxproj.user
+android/
+ios/
+mac/
+
 
