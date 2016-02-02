@@ -51,7 +51,7 @@ int CacheConn::Init()
 
 	m_last_connect_time = cur_time;
 
-	// 200ms超时
+	// 200ms超时test
 
 	struct timeval timeout = {0, 200000};
 	m_pContext = redisConnectWithTimeout(m_pCachePool->GetServerIP(), m_pCachePool->GetServerPort(), timeout);
