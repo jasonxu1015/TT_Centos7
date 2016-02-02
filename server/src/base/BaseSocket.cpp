@@ -20,6 +20,7 @@ CBaseSocket* FindBaseSocket(net_handle_t fd)
 	SocketMap::iterator iter = g_socket_map.find(fd);
 	if (iter != g_socket_map.end())
 	{
+		//一个socket可能会被多个线程获取，所以必须使用引用计数,防止A还是使用,B就把socket close了
 		pSocket = iter->second;
 		pSocket->AddRef();
 	}
@@ -128,6 +129,8 @@ int CBaseSocket::Send(void* buf, int len)
 	if (ret == SOCKET_ERROR)
 	{
 		int err_code = _GetErrorCode();
+		//在这里会判断错误码是不是EWOULDBLOCK或EINPROGRESS
+		//如果不是的话，日志报打印错误码
 		if (_IsBlock(err_code))
 		{
 #if ((defined _WIN32) || (defined __APPLE__))

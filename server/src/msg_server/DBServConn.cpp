@@ -60,13 +60,13 @@ static void db_server_conn_timer_callback(void* callback_data, uint8_t msg, uint
 
 void init_db_serv_conn(serv_info_t* server_list, uint32_t server_count, uint32_t concur_conn_cnt)
 {
-	g_db_server_list = server_list;
-	g_db_server_count = server_count;
+	g_db_server_list = server_list;//总的数据库服务器*连接数
+	g_db_server_count = server_count;//总的数据库服务器*连接数
 
-	uint32_t total_db_instance = server_count / concur_conn_cnt;
-	g_db_server_login_count = (total_db_instance / 2) * concur_conn_cnt;
+	uint32_t total_db_instance = server_count / concur_conn_cnt;//concur_conn_cnt是指每台数据库服务器的可连接数 total_db_instance是指一共多少台服务器？
+	g_db_server_login_count = (total_db_instance / 2) * concur_conn_cnt;//total_db_instance服务器数中，有一半是用来做登录服务的？
 	log("DB server connection index for login business: [0, %u), for other business: [%u, %u) ",
-			g_db_server_login_count, g_db_server_login_count, g_db_server_count);
+			g_db_server_login_count, g_db_server_login_count, g_db_server_count);//%u是按unsignedint格式输入或输出数据
 
 	serv_init<CDBServConn>(g_db_server_list, g_db_server_count);
 

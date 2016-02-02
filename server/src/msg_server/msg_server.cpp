@@ -21,7 +21,7 @@
 CAes *pAes;
 
 // for client connect in
-void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
+void msg_serv_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)//这个函数由void CBaseSocket::_AcceptNewSocket()调用触发
 {
 	if (msg == NETLIB_MSG_CONNECT)
 	{
@@ -57,6 +57,7 @@ int main(int argc, char* argv[])
 	char* str_max_conn_cnt = config_file.GetConfigName("MaxConnCnt");
     char* str_aes_key = config_file.GetConfigName("aesKey");
 	uint32_t db_server_count = 0;
+	//读出有多少个DBServerIP,DBServerPort，然后把服务器数由 db_server_count返回
 	serv_info_t* db_server_list = read_server_config(&config_file, "DBServerIP", "DBServerPort", db_server_count);
 
 	uint32_t login_server_count = 0;
@@ -89,19 +90,26 @@ int main(int argc, char* argv[])
 	}
 
 	// 到BusinessServer的开多个并发的连接
-	uint32_t concurrent_db_conn_cnt = DEFAULT_CONCURRENT_DB_CONN_CNT;
-	uint32_t db_server_count2 = db_server_count * DEFAULT_CONCURRENT_DB_CONN_CNT;
+	uint32_t concurrent_db_conn_cnt = DEFAULT_CONCURRENT_DB_CONN_CNT;//每台机器可以有多少个连接数？
+	uint32_t db_server_count2 = db_server_count * DEFAULT_CONCURRENT_DB_CONN_CNT;//总的连接数？
 	char* concurrent_db_conn = config_file.GetConfigName("ConcurrentDBConnCnt");
 	if (concurrent_db_conn) {
 		concurrent_db_conn_cnt  = atoi(concurrent_db_conn);
-		db_server_count2 = db_server_count * concurrent_db_conn_cnt;
+		db_server_count2 = db_server_count * concurrent_db_conn_cnt;//是指每个数据库有2个连接，然后又有2个数据库，所以总的有db_server_count2个连接？
 	}
 
+	//db_server_count2是指总的可连接数，该数值由数据库实例数*每个实例可以同时连接接收多少连接来决定。如果配置文件中没有设置
+	//Concurrent,则默认为10
+
+	//db_server_list2里面保存每个可连接的信息当前为3
+	//db_server_list里面保存的是每个实例服务器的信息 ，当前为2
 	serv_info_t* db_server_list2 = new serv_info_t [ db_server_count2];
 	for (uint32_t i = 0; i < db_server_count2; i++) {
+		//db_server_list2里面，[0]~[2]为DBServerIP1的ip和端口，[3]~[5]为DBServerIP2的ip和端口
 		db_server_list2[i].server_ip = db_server_list[i / concurrent_db_conn_cnt].server_ip.c_str();
 		db_server_list2[i].server_port = db_server_list[i / concurrent_db_conn_cnt].server_port;
 	}
+
 
 	if (!listen_ip || !str_listen_port || !ip_addr1) {
 		log("config file miss, exit... ");

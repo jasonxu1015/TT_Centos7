@@ -447,11 +447,11 @@ void CMsgConn::_HandleLoginRequest(CImPdu* pPdu)
     log("HandleLoginReq, user_name=%s, status=%u, client_type=%u, client=%s, ",
         m_login_name.c_str(), online_status, m_client_type, m_client_version.c_str());
     CImUser* pImUser = CImUserManager::GetInstance()->GetImUserByLoginName(GetLoginName());
-    if (!pImUser) {
+    if (!pImUser) {//为该用户，new一个对应的CImUser，并保存进CImUserManager的m_im_user_map_by_name中
         pImUser = new CImUser(GetLoginName());
         CImUserManager::GetInstance()->AddImUserByLoginName(GetLoginName(), pImUser);
     }
-    pImUser->AddUnValidateMsgConn(this);
+    pImUser->AddUnValidateMsgConn(this);//把这个还未校验成功的MsgConn保存进一个set中，待会dbserver返回结果后，可以关联
     
     CDbAttachData attach_data(ATTACH_TYPE_HANDLE, m_handle, 0);
     // continue to validate if the user is OK
@@ -584,7 +584,7 @@ void CMsgConn::_HandleClientMsgData(CImPdu* pPdu)
     string msg_data = msg.msg_data();
 
 	if (g_log_msg_toggle) {
-		log("HandleClientMsgData, %d->%d, msg_type=%u, msg_id=%u. ", GetUserId(), to_session_id, msg_type, msg_id);
+		log("HandleClientMsgData, %d->%d, msg_type=%u, msg_id=%u, msg_data=%s. ", GetUserId(), to_session_id, msg_type, msg_id, msg_data.c_str());
 	}
 
 	uint32_t cur_time = time(NULL);

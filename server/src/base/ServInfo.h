@@ -24,7 +24,7 @@ typedef struct {
 } serv_info_t;
 
 template <class T>
-void serv_init(serv_info_t* server_list, uint32_t server_count)
+void serv_init(serv_info_t* server_list, uint32_t server_count)//连接serv_info_t里面的服务器，并且new对应的pConn类，保存进serv_info_t中
 {
 	for (uint32_t i = 0; i < server_count; i++) {
 		T* pConn = new T();

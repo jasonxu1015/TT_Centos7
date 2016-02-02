@@ -24,7 +24,8 @@ static CImConn* FindImConn(ConnMap_t* imconn_map, net_handle_t handle)
 }
 
 //当msgserver有数据到达时，会回调到imconn_callback(),
-void imconn_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
+void imconn_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)//这个属于业务相关的，只处理连接成功、读写、断开。而没有监听相关
+	//由void CBaseSocket::OnRead()调用
 {
 	log("enter[%s]", __FUNCTION__);
 
@@ -155,6 +156,7 @@ void CImConn::OnRead()
             
 			HandlePdu(pPdu);
 
+			//解析报文成功后，则会从缓冲区中将该报文删除掉
 			m_in_buf.Read(NULL, pdu_len);
 			delete pPdu;
             pPdu = NULL;
@@ -181,6 +183,14 @@ void CImConn::OnWrite()
 		if (send_size > NETLIB_MAX_SOCKET_BUF_SIZE) {
 			send_size = NETLIB_MAX_SOCKET_BUF_SIZE;
 		}
+
+		//循环发送，直到返回值小于等于0跳出，等待下一次EPOLLOUT事件响应，或者是把发送缓冲区写完了，
+		// 退出然后设置m_busy为false
+		
+		//简单地说：EPOLLOUT事件只有socket从unwritable变为writable时
+		// ，才会触发一次。对于EPOLLOUT事件，必须要将该文件描述符缓冲
+		// 区一直写满，让 errno 返回 EAGAIN 为止，或者发送完所有数据为止。
+		
 
 		int ret = netlib_send(m_handle, m_out_buf.GetBuffer(), send_size);
 		if (ret <= 0) {

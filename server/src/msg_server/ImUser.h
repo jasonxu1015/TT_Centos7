@@ -66,7 +66,7 @@ private:
     bool 			m_bValidate;
     
     map<uint32_t /* handle */, CMsgConn*>	m_conn_map;
-    set<CMsgConn*> m_unvalidate_conn_set;
+    set<CMsgConn*> m_unvalidate_conn_set;//一个用户id，可能有多种客户端连接，比如电脑和手机
 };
 
 typedef map<uint32_t /* user_id */, CImUser*> ImUserMap_t;
@@ -97,8 +97,8 @@ public:
     
     void BroadcastPdu(CImPdu* pdu, uint32_t client_type_flag);
 private:
-    ImUserMap_t m_im_user_map;
-    ImUserMapByName_t m_im_user_map_by_name;
+    ImUserMap_t m_im_user_map;//用户id和CImUser的关联
+    ImUserMapByName_t m_im_user_map_by_name;//用户登录名和CImUser的关联
 };
 
 void get_online_user_info(list<user_stat_t>* online_user_info);
