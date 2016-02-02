@@ -23,20 +23,24 @@ static CImConn* FindImConn(ConnMap_t* imconn_map, net_handle_t handle)
 	return pConn;
 }
 
+//当msgserver有数据到达时，会回调到imconn_callback(),
 void imconn_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
+	log("enter[%s]", __FUNCTION__);
+
 	NOTUSED_ARG(handle);
 	NOTUSED_ARG(pParam);
 
 	if (!callback_data)
 		return;
 
+	//根据hash表和socket，去找到对应的CImConn，CImConn里面有具体的业务处理
 	ConnMap_t* conn_map = (ConnMap_t*)callback_data;
 	CImConn* pConn = FindImConn(conn_map, handle);
 	if (!pConn)
 		return;
 
-	//log("msg=%d, handle=%d ", msg, handle);
+	log("msg=%d, handle=%d ", msg, handle);
 
 	switch (msg)
 	{
@@ -58,6 +62,7 @@ void imconn_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pP
 	}
 
 	pConn->ReleaseRef();
+	log("leave[%s]", __FUNCTION__);
 }
 
 //////////////////////////

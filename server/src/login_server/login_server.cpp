@@ -59,6 +59,7 @@ void http_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pPar
 {
 	log("enter[%s]", __FUNCTION__);
 
+	//当有客户端连接到login_server的8080端口时，该函数被回调，会new一个CHttpConn来进行业务处理
     if (msg == NETLIB_MSG_CONNECT)
     {
         CHttpConn* pConn = new CHttpConn();

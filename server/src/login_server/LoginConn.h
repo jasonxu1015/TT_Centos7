@@ -11,6 +11,7 @@
 #include "imconn.h"
 
 enum {
+	//???LOGIN_CONN_TYPE_CLIENT指的是？
 	LOGIN_CONN_TYPE_CLIENT = 1,
 	LOGIN_CONN_TYPE_MSG_SERV
 };

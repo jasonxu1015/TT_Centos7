@@ -16,10 +16,12 @@ static ConnMap_t g_msg_serv_conn_map;//这两个map关联的是socket和CImConn 
 static uint32_t g_total_online_user_cnt = 0;	// 并发在线总人数
 map<uint32_t, msg_serv_info_t*> g_msg_serv_info;//保存了消息服务器的信息和相应的socket
 
+//每隔一秒，这个函数就会被调用一次
 void login_conn_timer_callback(void* callback_data, uint8_t msg, uint32_t handle, void* pParam)
 {
 	log("enter[%s]", __FUNCTION__);
 
+	//两个conn_map里所有的连接都要调用一次OnTimer()
 	uint64_t cur_time = get_tick_count();
 	for (ConnMap_t::iterator it = g_client_conn_map.begin(); it != g_client_conn_map.end(); ) {
 		ConnMap_t::iterator it_old = it;
@@ -131,7 +133,7 @@ void CLoginConn::OnTimer(uint64_t curr_tick)
 
 	if (m_conn_type == LOGIN_CONN_TYPE_CLIENT) {
 		if (curr_tick > m_last_recv_tick + CLIENT_TIMEOUT) {
-			Close();
+			Close();//超过2min则断开，指的是客户端的短连接2min中内没有新的数据到达，就断开？？？
 		}
 	} else {
 		if (curr_tick > m_last_send_tick + SERVER_HEARTBEAT_INTERVAL) {//每隔5s就给msg_server发送一个心跳包
@@ -144,6 +146,7 @@ void CLoginConn::OnTimer(uint64_t curr_tick)
 			SendPdu(&pdu);
 		}
 
+		//30s内没有收到msg-server的数据，则判断MsgServer断开了
 		if (curr_tick > m_last_recv_tick + SERVER_TIMEOUT) {
 			log("connection to MsgServer timeout ");
 			Close();
@@ -192,8 +195,10 @@ void CLoginConn::_HandleMsgServInfo(CImPdu* pPdu)
 	pMsgServInfo->max_conn_cnt = msg.max_conn_cnt();
 	pMsgServInfo->cur_conn_cnt = msg.cur_conn_cnt();
 	pMsgServInfo->hostname = msg.host_name();
+	//此处保存Msg_Sever的信息
 	g_msg_serv_info.insert(make_pair(m_handle, pMsgServInfo));
 
+	//???在线并发总人数是将当前的消息服务器的总人数直接加上？
 	g_total_online_user_cnt += pMsgServInfo->cur_conn_cnt;
 
 	log("MsgServInfo, ip_addr1=%s, ip_addr2=%s, port=%d, max_conn_cnt=%d, cur_conn_cnt=%d, "\
@@ -215,6 +220,7 @@ void CLoginConn::_HandleUserCntUpdate(CImPdu* pPdu)
         msg.ParseFromArray(pPdu->GetBodyData(), pPdu->GetBodyLength());
 
 		uint32_t action = msg.user_action();
+		//每当有一个客户连接上来，则pMsgServInfo里面的用户数+1,总并发数也加1
 		if (action == USER_CNT_INC) {
 			pMsgServInfo->cur_conn_cnt++;
 			g_total_online_user_cnt++;

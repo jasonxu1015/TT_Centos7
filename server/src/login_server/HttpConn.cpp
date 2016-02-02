@@ -132,26 +132,27 @@ int CHttpConn::Send(void* data, int len)
 	log("enter[%s]", __FUNCTION__);
 
 	m_last_send_tick = get_tick_count();
+	log("要发送的数据为[%s]", (char*)data);
 
-	if (m_busy)
+	if (m_busy)//之前还有数据没有发完，不能直接发送当前数据，只能把数据追加到发送缓存区
 	{
 		m_out_buf.Write(data, len);
 		return len;
 	}
 
-	int ret = netlib_send(m_sock_handle, data, len);
+	int ret = netlib_send(m_sock_handle, data, len);//之前没有数据还在缓存中，可以直接发
 	if (ret < 0)
 		ret = 0;
 
 	if (ret < len)
 	{
-		m_out_buf.Write((char*)data + ret, len - ret);
+		m_out_buf.Write((char*)data + ret, len - ret);//发送不完的数据，可以放进缓存中，并设置busy为true,等待下一次epoll回调说可以EPOLLOUT
 		m_busy = true;
 		//log("not send all, remain=%d\n", m_out_buf.GetWriteOffset());
 	}
     else
     {
-        OnWriteComlete();
+        OnWriteComlete();//当所有数据都写完时，则可以断开这个连接了
     }
 
 	log("leave[%s]", __FUNCTION__);
@@ -173,6 +174,7 @@ void CHttpConn::Close()
 
 }
 
+	//CHttpConn构造完成后，调用该函数，设置对应socket的回调函数和回调参数
 void CHttpConn::OnConnect(net_handle_t handle)
 {
 	log("enter[%s]", __FUNCTION__);
@@ -183,10 +185,10 @@ void CHttpConn::OnConnect(net_handle_t handle)
     g_http_conn_map.insert(make_pair(m_conn_handle, this));
     
     netlib_option(handle, NETLIB_OPT_SET_CALLBACK, (void*)httpconn_callback);
+	//这里的回调参数，和loginconn里面的不一样，猜想loginconn是因为有两个map，所以需要传递map为参数。而这里只有一个map
     netlib_option(handle, NETLIB_OPT_SET_CALLBACK_DATA, reinterpret_cast<void *>(m_conn_handle) );
     netlib_option(handle, NETLIB_OPT_GET_REMOTE_IP, (void*)&m_peer_ip);
 	log("leave[%s]", __FUNCTION__);
-
 }
 
 void CHttpConn::OnRead()
@@ -222,7 +224,8 @@ void CHttpConn::OnRead()
         return;
     }
 
-	//log("OnRead, buf_len=%u, conn_handle=%u\n", buf_len, m_conn_handle); // for debug
+	log("OnRead, buf_len=%u, conn_handle=%u\n", buf_len, m_conn_handle); // for debug
+	log("OnRead in_buf[%s]\n", in_buf);
 
 	
 	m_cHttpParser.ParseHttpContent(in_buf, buf_len);
@@ -245,6 +248,7 @@ void CHttpConn::OnWrite()
 {
 	log("enter[%s]", __FUNCTION__);
 
+	//用于判断是否当前有数据要发送m_busy为true时，则继续往下走
 	if (!m_busy)
 		return;
 

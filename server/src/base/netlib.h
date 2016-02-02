@@ -48,7 +48,7 @@ int netlib_delete_timer(callback_t callback, void* user_data);
 
 int netlib_add_loop(callback_t callback, void* user_data);
 
-void netlib_eventloop(uint32_t wait_timeout = 100);
+void netlib_eventloop(uint32_t wait_timeout = 100);//Ä¬ÈÏ×îĞ¡×èÈû100ºÁÃë
 
 void netlib_stop_event();
 
