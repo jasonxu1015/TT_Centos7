@@ -218,14 +218,7 @@ void CMsgConn::OnConnect(net_handle_t handle)
 
 void CMsgConn::OnClose()
 {
-	//git test2
-	//branch test
-
-	//local branch test
-	//master
-	//ct test
-	//1
-	//：2
+	//a
     log("Warning: peer closed. ");
 	Close();
 }
