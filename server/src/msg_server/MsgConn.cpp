@@ -222,6 +222,7 @@ void CMsgConn::OnClose()
 	//branch test
 
 	//local branch test
+	//ct test
     log("Warning: peer closed. ");
 	Close();
 }
