@@ -335,7 +335,7 @@ void CEventDispatch::StopDispatch()
 void CEventDispatch::AddEvent(SOCKET fd, uint8_t socket_event)
 {
 	struct epoll_event ev;
-	ev.events = EPOLLIN | EPOLLOUT | EPOLLET | EPOLLPRI | EPOLLERR | EPOLLHUP;
+	ev.events = EPOLLIN | EPOLLOUT | EPOLLET | EPOLLPRI | EPOLLERR | EPOLLHUP;//使用边缘触发，需要注意，读数据的时候必须一直读到没有数据为止。
 	ev.data.fd = fd;
 	if (epoll_ctl(m_epfd, EPOLL_CTL_ADD, fd, &ev) != 0)
 	{
@@ -362,7 +362,11 @@ void CEventDispatch::StartDispatch(uint32_t wait_timeout)
     
 	while (running)
 	{
-		nfds = epoll_wait(m_epfd, events, 1024, wait_timeout);
+		//参数events用来从内核得到事件的集合，maxevents告之内核这个events有多大，
+		// 这个maxevents的值不能大于创建epoll_create()时的size，参数timeout是超时
+		// 时间（毫秒，0会立即返回，-1将不确定，也有说法说是永久阻塞）。该函数返
+		// 回需要处理的事件数目，如返回0表示已超时。
+		nfds = epoll_wait(m_epfd, events, 1024, wait_timeout);//1024并不代表epoll只能监控1024个io，而只是限制一次返回的最大事件数吧
 		for (int i = 0; i < nfds; i++)
 		{
 			int ev_fd = events[i].data.fd;

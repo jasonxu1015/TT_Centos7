@@ -120,14 +120,14 @@ int CImPdu::ReadPduHeader(uchar_t* buf, uint32_t len)
 CImPdu* CImPdu::ReadPdu(uchar_t *buf, uint32_t len)
 {
 	uint32_t pdu_len = 0;
-	if (!IsPduAvailable(buf, len, pdu_len))
+	if (!IsPduAvailable(buf, len, pdu_len))//这里会读出整个包的长度
 		return NULL;
 
 	uint16_t service_id = CByteStream::ReadUint16(buf + 8);
-	uint16_t command_id = CByteStream::ReadUint16(buf + 10);
+	uint16_t command_id = CByteStream::ReadUint16(buf + 10);//从包头中读出
 	CImPdu* pPdu = NULL;
 
-    pPdu = new CImPdu();
+    pPdu = new CImPdu();//在这里new报文的解析类，后面传递的都是这次new出来的指针
     //pPdu->_SetIncomingLen(pdu_len);
     //pPdu->_SetIncomingBuf(buf);
     pPdu->Write(buf, pdu_len);
@@ -138,8 +138,8 @@ CImPdu* CImPdu::ReadPdu(uchar_t *buf, uint32_t len)
 
 bool CImPdu::IsPduAvailable(uchar_t* buf, uint32_t len, uint32_t& pdu_len)
 {
-	if (len < IM_PDU_HEADER_LEN)
-		return false;
+	if (len < IM_PDU_HEADER_LEN)//判断包是否有效的，因为pb类似xml一样，只是一种序列化报文，前面还是需要加报文头的
+		return false;//保证已接收到头部长度的数据
 
 	pdu_len = CByteStream::ReadUint32(buf);
 	if (pdu_len > len)

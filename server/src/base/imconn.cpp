@@ -112,7 +112,8 @@ int CImConn::Send(void* data, int len)
 		remain -= ret;
 	}
 
-	if (remain > 0)
+	if (remain > 0)//当这次循环写入socket已经写不进去了，对方又不读数据导致socket缓存一直是满的，
+	// 就只好把数据给放进我们自己的缓存中了，并设置m_busy为ture,表示还没发送完数据
 	{
 		m_out_buf.Write((char*)data + offset, remain);
 		m_busy = true;
@@ -175,7 +176,7 @@ void CImConn::OnRead()
 
 void CImConn::OnWrite()
 {
-	if (!m_busy)
+	if (!m_busy)//没有需要发送的数据，则跳过，这时候epoll不会再次通知你这个socket可写。但没有关系，直接写就是了
 		return;
 
 	while (m_out_buf.GetWriteOffset() > 0) {
@@ -198,7 +199,7 @@ void CImConn::OnWrite()
 			break;
 		}
 
-		m_out_buf.Read(NULL, ret);
+		m_out_buf.Read(NULL, ret);//删除已发送的数据
 	}
 
 	if (m_out_buf.GetWriteOffset() == 0) {

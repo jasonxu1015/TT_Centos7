@@ -95,6 +95,7 @@ static CDBServConn* get_db_server_conn_in_range(uint32_t start_pos, uint32_t sto
 	}
 
 	// return a random valid DB server connection
+	//这里不需要使用一致性哈希去判断要获取哪台服务器，因为一个用户不需要固定地从一台服务器上去访问数据库
 	while (true) {
 		int i = rand() % (stop_pos - start_pos) + start_pos;
 		pDbConn = (CDBServConn*)g_db_server_list[i].serv_conn;
@@ -351,7 +352,7 @@ void CDBServConn::_HandleValidateResponse(CImPdu* pPdu)
         
         log("user_name: %s, uid: %d", login_name.c_str(), user_id);
         pMsgConn->SetUserId(user_id);
-        pMsgConn->SetOpen();
+        pMsgConn->SetOpen();//open这个状态用来表示当前用户是否已经验证登录成功
         pMsgConn->SendUserStatusUpdate(IM::BaseDefine::USER_STATUS_ONLINE);
         pUser->ValidateMsgConn(pMsgConn->GetHandle(), pMsgConn);
         

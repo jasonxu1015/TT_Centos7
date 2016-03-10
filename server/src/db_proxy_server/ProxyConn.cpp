@@ -150,7 +150,7 @@ void CProxyConn::OnRead()
 			m_in_buf.Extend(READ_BUF_SIZE);
 
 		int ret = netlib_recv(m_handle, m_in_buf.GetBuffer() + m_in_buf.GetWriteOffset(), READ_BUF_SIZE);
-		if (ret <= 0)
+		if (ret <= 0)//要一直读，把这个数据给读完
 			break;
 
 		m_recv_bytes += ret;
@@ -161,7 +161,7 @@ void CProxyConn::OnRead()
 	uint32_t pdu_len = 0;
     try {
         while ( CImPdu::IsPduAvailable(m_in_buf.GetBuffer(), m_in_buf.GetWriteOffset(), pdu_len) ) {
-            HandlePduBuf(m_in_buf.GetBuffer(), pdu_len);
+            HandlePduBuf(m_in_buf.GetBuffer(), pdu_len);//主线程把数据读出来以后，将new 一个task，然后交给线程池去处理了。
             m_in_buf.Read(NULL, pdu_len);
         }
     } catch (CPduException& ex) {

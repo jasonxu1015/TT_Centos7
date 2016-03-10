@@ -125,7 +125,7 @@ bool CMessageModel::sendMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t n
 	CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
 	if (pDBConn)
     {
-        string strTableName = "IMMessage_" + int2string(nRelateId % 8);
+        string strTableName = "IMMessage_" + int2string(nRelateId % 8);//存放聊天消息IMMessage的一共有8张表,用nRelateId可以判断本次对话应该保存进哪张表里面
         string strSql = "insert into " + strTableName + " (`relateId`, `fromId`, `toId`, `msgId`, `content`, `status`, `type`, `created`, `updated`) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         // 必须在释放连接前delete CPrepareStatement对象，否则有可能多个线程操作mysql对象，会crash
         CPrepareStatement* pStmt = new CPrepareStatement();

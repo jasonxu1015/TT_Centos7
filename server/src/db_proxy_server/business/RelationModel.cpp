@@ -137,7 +137,7 @@ uint32_t CRelationModel::addRelation(uint32_t nSmallId, uint32_t nBigId)
             if(nRelationId != INVALID_VALUE)
             {
                 // 初始化msgId
-                if(!CMessageModel::getInstance()->resetMsgId(nRelationId))
+                if(!CMessageModel::getInstance()->resetMsgId(nRelationId))//新建了关系后，重置消息技术？
                 {
                     log("reset msgId failed. smallId=%u, bigId=%u.", nSmallId, nBigId);
                 }

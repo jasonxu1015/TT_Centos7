@@ -60,7 +60,7 @@ namespace DB_PROXY {
             pPduResp->SetSeqNum(pPdu->GetSeqNum());
             pPduResp->SetServiceId(IM::BaseDefine::SID_MSG);
             pPduResp->SetCommandId(IM::BaseDefine::CID_MSG_UNREAD_CNT_RESPONSE);
-            CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
+            CProxyConn::AddResponsePdu(conn_uuid, pPduResp);//把应答放进缓存容器里面
         }
         else
         {

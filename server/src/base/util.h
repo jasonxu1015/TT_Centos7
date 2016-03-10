@@ -30,8 +30,10 @@
 #define NOTUSED_ARG(v) ((void)v)		// used this to remove warning C4100, unreferenced parameter
 
 /// yunfan modify end 
-class CRefObject
-{
+
+//引用计数基类，socket的封装类和每个imconn类都继承自它，防止一个对象有有多个指针指向它时，其中一个指针将其删除，
+//另一个指针又去调用它，导致出错。需要手动调用AddRef和ReleaseRef，跟智能指针有点不一样
+class CRefObject{
 public:
 	CRefObject();
 	virtual ~CRefObject();

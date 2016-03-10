@@ -131,12 +131,13 @@ int CBaseSocket::Send(void* buf, int len)
 		int err_code = _GetErrorCode();
 		//在这里会判断错误码是不是EWOULDBLOCK或EINPROGRESS
 		//如果不是的话，日志报打印错误码
+		//如果有发送一部分数据的话，则这里不会是EWOULDBLOCK,如果是EWOULDBLOCK，则说明一定是一个字节都没发送成功
 		if (_IsBlock(err_code))
 		{
 #if ((defined _WIN32) || (defined __APPLE__))
 			CEventDispatch::Instance()->AddEvent(m_socket, SOCKET_WRITE);
 #endif
-			ret = 0;
+			ret = 0;//这里设置为0是正确的
 			//log("socket send block fd=%d", m_socket);
 		}
 		else
@@ -340,7 +341,7 @@ void CBaseSocket::_AcceptNewSocket()
 		pSocket->SetRemoteIP(ip_str);
 		pSocket->SetRemotePort(port);
 
-		_SetNoDelay(fd);
+		_SetNoDelay(fd);//设置nodelay是为了保证在epoll边缘触发下，可以及时把写入socket的数据发出去，才可以触发下次可写事件？
 		_SetNonblock(fd);
 		AddBaseSocket(pSocket);
 		CEventDispatch::Instance()->AddEvent(fd, SOCKET_READ | SOCKET_EXCEP);

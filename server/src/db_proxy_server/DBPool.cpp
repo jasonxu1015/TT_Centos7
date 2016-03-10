@@ -344,8 +344,8 @@ CDBConn* CDBPool::GetDBConn()
 	m_free_notify.Lock();
 
 	while (m_free_list.empty()) {
-		if (m_db_cur_conn_cnt >= m_db_max_conn_cnt) {
-			m_free_notify.Wait();
+		if (m_db_cur_conn_cnt >= m_db_max_conn_cnt) {//max_conn_cnt是允许的最大连接数上限,一开始的连接数是2
+			m_free_notify.Wait();//没有空闲资源时，挂起线程等待其他线程发出signal后再唤醒。并且只会唤醒一个等待的线程，不会惊群
 		} else {
 			CDBConn* pDBConn = new CDBConn(this);
 			int ret = pDBConn->Init();

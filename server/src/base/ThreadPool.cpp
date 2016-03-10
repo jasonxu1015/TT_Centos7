@@ -31,7 +31,7 @@ void* CWorkerThread::StartRoutine(void* arg)
 
 void CWorkerThread::Start()
 {
-	(void)pthread_create(&m_thread_id, NULL, StartRoutine, this);
+	(void)pthread_create(&m_thread_id, NULL, StartRoutine, this);//通过this指针传自身给线程运行函数
 }
 
 void CWorkerThread::Execute()
@@ -41,7 +41,7 @@ void CWorkerThread::Execute()
 
 		// put wait in while cause there can be spurious wake up (due to signal/ENITR)
 		while (m_task_list.empty()) {
-			m_thread_notify.Wait();
+			m_thread_notify.Wait();//任务队列为空，则休眠
 		}
 
 		CTask* pTask = m_task_list.front();
@@ -61,7 +61,7 @@ void CWorkerThread::PushTask(CTask* pTask)
 {
 	m_thread_notify.Lock();
 	m_task_list.push_back(pTask);
-	m_thread_notify.Signal();
+	m_thread_notify.Signal();//该线程有任务了，则进行唤醒,注意，在这里是主线程去调用这个函数，所以子线程就算休眠了，也没问题的
 	m_thread_notify.Unlock();
 }
 

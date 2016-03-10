@@ -52,6 +52,10 @@ private:
 	bool 		m_bRunning;
 };
 
+//  pthread_cond_wait() 用于阻塞当前线程，等待别的线程使用pthread_cond_signal()或pthread_cond_broadcast来唤醒它。
+//  pthread_cond_wait() 必须与pthread_mutex 配套使用。pthread_cond_wait()函数一进入wait状态就会自动release mutex。
+//  当其他线程通过pthread_cond_signal()或pthread_cond_broadcast，把该线程唤醒，使pthread_cond_wait()通过（返回）时，
+//  该线程又自动获得该mutex。
 class CThreadNotify
 {
 public:
