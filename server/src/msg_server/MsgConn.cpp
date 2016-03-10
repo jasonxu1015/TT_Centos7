@@ -225,6 +225,7 @@ void CMsgConn::OnClose()
 	//master
 	//ct test
 	//1
+	//：2
     log("Warning: peer closed. ");
 	Close();
 }
