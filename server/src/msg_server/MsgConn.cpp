@@ -220,6 +220,8 @@ void CMsgConn::OnClose()
 {
 	//git test2
 	//branch test
+
+	//local branch test
     log("Warning: peer closed. ");
 	Close();
 }
