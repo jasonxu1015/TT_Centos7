@@ -269,6 +269,7 @@ void CMsgConn::OnTimer(uint64_t curr_tick)
 
 void CMsgConn::HandlePdu(CImPdu* pPdu)
 {
+	//github test
 	// request authorization check
 	if (pPdu->GetCommandId() != CID_LOGIN_REQ_USERLOGIN && !IsOpen() && IsKickOff()) {
         log("HandlePdu, wrong msg. ");
