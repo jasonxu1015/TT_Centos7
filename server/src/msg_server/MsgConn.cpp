@@ -219,6 +219,9 @@ void CMsgConn::OnConnect(net_handle_t handle)
 void CMsgConn::OnClose()
 {
 	//a
+	//b
+	//	// c
+	//d
     log("Warning: peer closed. ");
 	Close();
 }
