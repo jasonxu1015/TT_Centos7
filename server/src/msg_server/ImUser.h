@@ -65,7 +65,7 @@ private:
     
     bool 			m_bValidate;
     
-    map<uint32_t /* handle */, CMsgConn*>	m_conn_map;
+    map<uint32_t /* handle */, CMsgConn*>	m_conn_map;//这个map会把socket的fd和封装类绑定在一起,同一个用户可能会多端登陆
     set<CMsgConn*> m_unvalidate_conn_set;//一个用户id，可能有多种客户端连接，比如电脑和手机
 };
 

@@ -130,7 +130,7 @@ CImPdu* CImPdu::ReadPdu(uchar_t *buf, uint32_t len)
     pPdu = new CImPdu();//在这里new报文的解析类，后面传递的都是这次new出来的指针
     //pPdu->_SetIncomingLen(pdu_len);
     //pPdu->_SetIncomingBuf(buf);
-    pPdu->Write(buf, pdu_len);
+    pPdu->Write(buf, pdu_len);//放进缓存中
     pPdu->ReadPduHeader(buf, IM_PDU_HEADER_LEN);
     
     return pPdu;
@@ -159,8 +159,8 @@ bool CImPdu::IsPduAvailable(uchar_t* buf, uint32_t len, uint32_t& pdu_len)
 void CImPdu::SetPBMsg(const google::protobuf::MessageLite* msg)
 {
     //设置包体，则需要重置下空间
-    m_buf.Read(NULL, m_buf.GetWriteOffset());
-    m_buf.Write(NULL, sizeof(PduHeader_t));
+    m_buf.Read(NULL, m_buf.GetWriteOffset());//把当前缓冲区的数据都读出来，但传入的是NULL，相当于是清空了缓存
+    m_buf.Write(NULL, sizeof(PduHeader_t));//给头文件预留空间
     uint32_t msg_size = msg->ByteSize();
     uchar_t* szData = new uchar_t[msg_size];
     //ALLOC_FAIL_ASSERT(szData)

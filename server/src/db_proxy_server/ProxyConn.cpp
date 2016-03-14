@@ -102,12 +102,12 @@ CProxyConn* get_proxy_conn_by_uuid(uint32_t uuid)
 //////////////////////////
 CProxyConn::CProxyConn()
 {
-	m_uuid = ++CProxyConn::s_uuid_alloctor;
+	m_uuid = ++CProxyConn::s_uuid_alloctor;//这个序号是用一个uint_32，不断+1来实现的一个简单的序号计数
 	if (m_uuid == 0) {
 		m_uuid = ++CProxyConn::s_uuid_alloctor;
 	}
 
-	g_uuid_conn_map.insert(make_pair(m_uuid, this));
+	g_uuid_conn_map.insert(make_pair(m_uuid, this));//将这个来自消息服务器的连接类，和一个序号绑在一起
 }
 
 CProxyConn::~CProxyConn()
@@ -239,7 +239,7 @@ void CProxyConn::SendResponsePduList()
 		s_response_pdu_list.pop_front();
 		s_list_lock.unlock();
 
-		CProxyConn* pConn = get_proxy_conn_by_uuid(pResp->conn_uuid);
+		CProxyConn* pConn = get_proxy_conn_by_uuid(pResp->conn_uuid);//根据conn_uuid去查找出原来的连接，通过那个连接，把数据发回去。
 		if (pConn) {
 			if (pResp->pPdu) {
 				pConn->SendPdu(pResp->pPdu);
@@ -250,7 +250,7 @@ void CProxyConn::SendResponsePduList()
 		}
 
 		if (pResp->pPdu)
-			delete pResp->pPdu;
+			delete pResp->pPdu;//把这个缓存了报文的封装类删除掉
 		delete pResp;
 
 		s_list_lock.lock();

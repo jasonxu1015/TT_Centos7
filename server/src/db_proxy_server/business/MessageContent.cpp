@@ -161,7 +161,7 @@ namespace DB_PROXY {
                             return;
                         }
                     } else if(nMsgType== IM::BaseDefine::MSG_TYPE_SINGLE_TEXT) {
-                        if (nFromId != nToId) {
+                        if (nFromId != nToId) {//sessionid是有两个的，relationship就只有一个
                             nSessionId = CSessionModel::getInstance()->getSessionId(nFromId, nToId, IM::BaseDefine::SESSION_TYPE_SINGLE, false);
                             if (INVALID_VALUE == nSessionId) {
                                 nSessionId = CSessionModel::getInstance()->addSession(nFromId, nToId, IM::BaseDefine::SESSION_TYPE_SINGLE);
@@ -174,10 +174,12 @@ namespace DB_PROXY {
                             uint32_t nRelateId = CRelationModel::getInstance()->getRelationId(nFromId, nToId, true);
                             if(nSessionId != INVALID_VALUE && nRelateId != INVALID_VALUE)
                             {
-                                nMsgId = pMsgModel->getMsgId(nRelateId);
+                                nMsgId = pMsgModel->getMsgId(nRelateId);//获取msgid
                                 if(nMsgId != INVALID_VALUE)
                                 {
+									//将消息保存到表中
                                     pMsgModel->sendMessage(nRelateId, nFromId, nToId, nMsgType, nCreateTime, nMsgId, (string&)msg.msg_data());
+									//更新IMRecentSession中的更新时间updated
                                     CSessionModel::getInstance()->updateSession(nSessionId, nNow);
                                     CSessionModel::getInstance()->updateSession(nPeerSessionId, nNow);
                                 }
@@ -233,12 +235,12 @@ namespace DB_PROXY {
 
                     log("fromId=%u, toId=%u, type=%u, msgId=%u, sessionId=%u", nFromId, nToId, nMsgType, nMsgId, nSessionId);
 
-                    msg.set_msg_id(nMsgId);
-                    pPduResp->SetPBMsg(&msg);
-                    pPduResp->SetSeqNum(pPdu->GetSeqNum());
+                    msg.set_msg_id(nMsgId);//msgid是在这个函数中生成的，然后反填回去
+                    pPduResp->SetPBMsg(&msg);//把报文头和报文体填进CIMPdu的缓冲区中
+                    pPduResp->SetSeqNum(pPdu->GetSeqNum());//上面的函数虽然有writehead()，但实际上没有数据可以写，所以下面要再设置头
                     pPduResp->SetServiceId(IM::BaseDefine::SID_MSG);
                     pPduResp->SetCommandId(IM::BaseDefine::CID_MSG_DATA);
-                    CProxyConn::AddResponsePdu(conn_uuid, pPduResp);
+                    CProxyConn::AddResponsePdu(conn_uuid, pPduResp);//消息服务器将聊天消息发送给数据库代理服务器后，本身是没有存这个聊天消息数据的？所以需要再传回去？
                 }
                 else
                 {

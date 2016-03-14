@@ -108,12 +108,12 @@ void CImUser::BroadcastPduToMobile(CImPdu* pPdu, CMsgConn* pFromConn)
 }
 
 
-void CImUser::BroadcastClientMsgData(CImPdu* pPdu, uint32_t msg_id, CMsgConn* pFromConn, uint32_t from_id)
+void CImUser::BroadcastClientMsgData(CImPdu* pPdu, uint32_t msg_id, CMsgConn* pFromConn, uint32_t from_id)//pc发送了数据后，需要把数据再推送到其他端
 {
     for (map<uint32_t, CMsgConn*>::iterator it = m_conn_map.begin(); it != m_conn_map.end(); it++)
     {
         CMsgConn* pConn = it->second;
-        if (pConn != pFromConn) {
+        if (pConn != pFromConn) {//对除了本端外的其他客户端进行广播
             pConn->SendPdu(pPdu);
             pConn->AddToSendList(msg_id, from_id);
         }
@@ -227,7 +227,7 @@ CImUser* CImUserManager::GetImUserById(uint32_t user_id)
     return pUser;
 }
 
-CMsgConn* CImUserManager::GetMsgConnByHandle(uint32_t user_id, uint32_t handle)
+CMsgConn* CImUserManager::GetMsgConnByHandle(uint32_t user_id, uint32_t handle)//根据用户id和socket的fd去找到原来连接的封装类
 {
     CMsgConn* pMsgConn = NULL;
     CImUser* pImUser = GetImUserById(user_id);

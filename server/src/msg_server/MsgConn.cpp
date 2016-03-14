@@ -582,6 +582,7 @@ void CMsgConn::_HandleClientMsgData(CImPdu* pPdu)
 
 	uint32_t to_session_id = msg.to_session_id();
     uint32_t msg_id = msg.msg_id();
+	log("msgid: %d", msg_id);//可以确认从客户端传过来的msgid是0,需要确定，返回IMMsgDataAck时，客户端应该怎么跟原来发送的消息关联上?关联是使用报文包头的seqno，而不是报文体中的msgid
 	uint8_t msg_type = msg.msg_type();
     string msg_data = msg.msg_data();
 
@@ -595,6 +596,8 @@ void CMsgConn::_HandleClientMsgData(CImPdu* pPdu)
     msg.set_create_time(cur_time);
     msg.set_attach_data(attach_data.GetBuffer(), attach_data.GetLength());
     pPdu->SetPBMsg(&msg);
+
+	log("MsgData Seqno:[%d]", pPdu->GetSeqNum());
 	// send to DB storage server
 	CDBServConn* pDbConn = get_db_serv_conn();
 	if (pDbConn) {

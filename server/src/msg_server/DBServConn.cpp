@@ -221,7 +221,7 @@ void CDBServConn::HandlePdu(CImPdu* pPdu)
         case CID_MSG_GET_BY_MSG_ID_RES:
             _HandleGetMsgByIdResponse(pPdu);
             break;
-        case CID_MSG_DATA:
+        case CID_MSG_DATA://收到数据库代理服务器返回的消息，这时候这条消息已经入库完成了
             _HandleMsgData(pPdu);
             break;
         case CID_MSG_GET_LATEST_MSG_ID_RSP:
@@ -509,7 +509,7 @@ void CDBServConn::_HandleMsgData(CImPdu *pPdu)
     log("HandleMsgData, from_user_id=%u, to_user_id=%u, msg_id=%u.", from_user_id, to_user_id, msg_id);
     
     CMsgConn* pMsgConn = CImUserManager::GetInstance()->GetMsgConnByHandle(from_user_id, attach_data.GetHandle());
-    if (pMsgConn)
+    if (pMsgConn)//给客户返回确认应答
     {
         IM::Message::IMMsgDataAck msg2;
         msg2.set_user_id(from_user_id);
@@ -520,13 +520,13 @@ void CDBServConn::_HandleMsgData(CImPdu *pPdu)
         pdu.SetPBMsg(&msg2);
         pdu.SetServiceId(SID_MSG);
         pdu.SetCommandId(CID_MSG_DATA_ACK);
-        pdu.SetSeqNum(pPdu->GetSeqNum());
-        pMsgConn->SendPdu(&pdu);
+        pdu.SetSeqNum(pPdu->GetSeqNum());//bug，该函数会把序号放进报文头里面，单没有更新m_pdu_header.seq_num，导致的GetSeqNum的值为0
+        pMsgConn->SendPdu(&pdu);//经测试，注释掉该句后，是不会给客户端返回应答，会导致客户端10s后显示发送失败
     }
     
     CRouteServConn* pRouteConn = get_route_serv_conn();
     if (pRouteConn) {
-        pRouteConn->SendPdu(pPdu);
+        pRouteConn->SendPdu(pPdu);//给路由服务器发送用户的聊天消息
     }
     
     msg.clear_attach_data();
@@ -534,6 +534,7 @@ void CDBServConn::_HandleMsgData(CImPdu *pPdu)
     CImUser* pFromImUser = CImUserManager::GetInstance()->GetImUserById(from_user_id);
     CImUser* pToImUser = CImUserManager::GetInstance()->GetImUserById(to_user_id);
     pPdu->SetSeqNum(0);
+	//对本台消息服务器上的该用户的其他客户端和目标用户的所有客户端进行广播
     if (pFromImUser) {
         pFromImUser->BroadcastClientMsgData(pPdu, msg_id, pMsgConn, from_user_id);
     }

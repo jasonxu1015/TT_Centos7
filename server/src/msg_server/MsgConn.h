@@ -94,7 +94,7 @@ private:
     
     string 			m_client_version;	// e.g MAC/2.2, or WIN/2.2
     
-    list<msg_ack_t>	m_send_msg_list;
+    list<msg_ack_t>	m_send_msg_list;//记录这个连接发送过的聊天消息的msgid 和时间？
     
     uint32_t		m_msg_cnt_per_sec;
     

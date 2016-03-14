@@ -125,7 +125,8 @@ bool CMessageModel::sendMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t n
 	CDBConn* pDBConn = pDBManager->GetDBConn("teamtalk_master");
 	if (pDBConn)
     {
-        string strTableName = "IMMessage_" + int2string(nRelateId % 8);//存放聊天消息IMMessage的一共有8张表,用nRelateId可以判断本次对话应该保存进哪张表里面
+        string strTableName = "IMMessage_" + int2string(nRelateId % 8);//存放聊天消息IMMessage的一共有8张表,用nRelateId可以判断本次对话应该保存进哪张表里面,注意不是
+        // 根据用户id号去存的，而是根据关系id去存的，这样才不会把一条数据存两次
         string strSql = "insert into " + strTableName + " (`relateId`, `fromId`, `toId`, `msgId`, `content`, `status`, `type`, `created`, `updated`) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         // 必须在释放连接前delete CPrepareStatement对象，否则有可能多个线程操作mysql对象，会crash
         CPrepareStatement* pStmt = new CPrepareStatement();
@@ -150,7 +151,7 @@ bool CMessageModel::sendMessage(uint32_t nRelateId, uint32_t nFromId, uint32_t n
         if (bRet)
         {
             uint32_t nNow = (uint32_t) time(NULL);
-            incMsgCount(nFromId, nToId);
+            incMsgCount(nFromId, nToId);//增加未读计数 这是个hash表，表名为未读用户的id， 表中的各个key是消息来源方的id，value是未读计数
         }
         else
         {
@@ -244,7 +245,7 @@ void CMessageModel::getUnreadMsgCount(uint32_t nUserId, uint32_t &nTotalCnt, lis
     }
 }
 
-uint32_t CMessageModel::getMsgId(uint32_t nRelateId)
+uint32_t CMessageModel::getMsgId(uint32_t nRelateId)//从redis 数据库1 中，msg_id_relateID (是个string类型) ,去记录这两个用户的聊天消息msgid，相当于计数器
 {
     uint32_t nMsgId = 0;
     CacheManager* pCacheManager = CacheManager::getInstance();

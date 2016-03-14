@@ -50,7 +50,7 @@ typedef struct {
     uint16_t    reversed;    // 保留
 } PduHeader_t;
 
-class DLL_MODIFIER CImPdu
+class DLL_MODIFIER CImPdu//对报文的封装，里面有缓存，有报文头
 {
 public:
     CImPdu();
