@@ -82,7 +82,7 @@ string FileManager::createFileRelatePath() {
 int FileManager::uploadFile(const char *type, const void* content, u32 size, 
 							char *url, char *ext) {
 	//check file size
-	if (size > MAX_FILE_SIZE_PER_FILE) {
+	if (size > MAX_FILE_SIZE_PER_FILE) {//限制上传文件大小
 		log("File size[%d] should less than [%d]", size, 
 			MAX_FILE_SIZE_PER_FILE);
 		return -1;
@@ -145,7 +145,7 @@ int FileManager::getAbsPathByUrl(const string &url, string &path) {
 
 FileManager::Entry* 
 FileManager::getOrCreateEntry(const std::string& url, bool create) {
-	m_cs.Enter();
+	m_cs.Enter();//进入临界区 ，用互斥量mutex实现的
 	EntryMap::iterator it = m_map.find(url);
 	if (it != m_map.end()) {
 		log("the map has the file while url:%s", url.c_str());
