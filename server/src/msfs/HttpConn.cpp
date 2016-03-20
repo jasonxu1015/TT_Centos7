@@ -97,7 +97,7 @@ CHttpTask::CHttpTask(Request_t request)
 {
     m_ConnHandle = request.conn_handle;
     m_nMethod = request.method;
-    m_strUrl = request.strUrl;
+    m_strUrl = request.strUrl;//当是get 时 gdb 打印出来的是 g0/000/000/1458388241819125_139645645731.jpg
     m_strContentType = request.strContentType;
     m_pContent = request.pContent;
     m_nContentLen = request.nContentLen;
@@ -141,7 +141,7 @@ void CHttpTask::OnUpload()
         const char* pPos = memfind(m_pContent, m_nContentLen, CONTENT_DISPOSITION, strlen(CONTENT_DISPOSITION));
         if (pPos != NULL)
         {
-            nTmpLen = pPos - m_pContent;
+            nTmpLen = pPos - m_pContent;//查找出来的尾部 - 头部 = 长度
             const char* pPos2 = memfind(pPos, m_nContentLen - nTmpLen, "filename=", strlen("filename="));
             if (pPos2 != NULL)
             {
@@ -360,7 +360,7 @@ void CHttpTask::OnUpload()
         }
 }
 
-void  CHttpTask::OnDownload()
+void  CHttpTask::OnDownload()//响应图片下载请求
 {
         uint32_t  nFileSize = 0;
         int32_t nTmpSize = 0;
@@ -382,8 +382,8 @@ void  CHttpTask::OnDownload()
                     snprintf(szResponseHeader,sizeof(szResponseHeader), HTTP_RESPONSE_EXTEND, nTmpSize);
                 }
                 int nLen = strlen(szResponseHeader);
-                char* pContent = new char[nLen + nTmpSize];
-                memcpy(pContent, szResponseHeader, nLen);
+                char* pContent = new char[nLen + nTmpSize];//申请内存空间，包括响应头、消息报文头、和文件大小所需要的空间
+                memcpy(pContent, szResponseHeader, nLen);//先放响应头和消息报文头的数据到pContent中
                 g_fileManager->downloadFileByUrl((char*)m_strUrl.c_str(), pContent + nLen, &nFileSize);
                 int nTotalLen = nLen + nFileSize;
                 CHttpConn::AddResponsePdu(m_ConnHandle, pContent, nTotalLen);
@@ -513,11 +513,13 @@ void CHttpConn::OnRead()
     {
         string strUrl = m_HttpParser.GetUrl();
         log("IP:%s access:%s", m_peer_ip.c_str(), strUrl.c_str());
-        if (strUrl.find("..") != strUrl.npos) {
+        if (strUrl.find("..") != strUrl.npos) {//有查找到..就断开？
             Close();
             return;
         }
+        log("URL:%s ", strUrl.c_str());
         m_access_host = m_HttpParser.GetHost();
+        log("access_host:%s ", m_access_host.c_str());
         if (m_HttpParser.GetContentLen() > HTTP_UPLOAD_MAX)
         {
             // file is too big
@@ -539,6 +541,7 @@ void CHttpConn::OnRead()
             try {
                 pContent =new char[nContentLen];
                 memcpy(pContent, m_HttpParser.GetBodyContent(), nContentLen);
+				log("Content[%s]", pContent);
             }
             catch(...)
             {
@@ -558,6 +561,7 @@ void CHttpConn::OnRead()
         request.strContentType = m_HttpParser.GetContentType();
         request.strUrl = m_HttpParser.GetUrl() + 1;
         CHttpTask* pTask = new CHttpTask(request);
+		//将请求任务交给线程池去处理，一共有两个线程池，一个处理get,一个处理post
         if(HTTP_GET == m_HttpParser.GetMethod())
         {
         	g_GetThreadPool.AddTask(pTask);
@@ -608,7 +612,7 @@ void CHttpConn::OnTimer(uint64_t curr_tick)
     }
 }
 
-void CHttpConn::AddResponsePdu(uint32_t conn_handle, char* pContent, int nLen)
+void CHttpConn::AddResponsePdu(uint32_t conn_handle, char* pContent, int nLen)//http请求是由线程池里面的子线程去处理的，处理完后，会把响应放进静态list里面，由主线程去回复
 {
     Response_t* pResp = new Response_t;
     pResp->conn_handle = conn_handle;

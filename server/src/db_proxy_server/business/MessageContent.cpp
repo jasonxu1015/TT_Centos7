@@ -197,7 +197,8 @@ namespace DB_PROXY {
                             log("send msg to self. fromId=%u, toId=%u, msgType=%u", nFromId, nToId, nMsgType);
                         }
                         
-                    } else if(nMsgType == IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO) {
+                    } else if(nMsgType == IM::BaseDefine::MSG_TYPE_SINGLE_AUDIO) {//如果是语音的话，会先通过http，post到msfs服务器上去把语音保存起来。然后把这个路径保存在
+					//IMAudio中。然后把IMAudio中的主键id号，保存在IMMessage_2中，再把只包含主键id，不包括语音数据的消息，发送给接收方。
                         
                         if(nFromId != nToId)
                         {
