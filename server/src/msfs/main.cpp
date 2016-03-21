@@ -115,7 +115,7 @@ void Stop(int signo)
     }
 }
 int main(int argc, char* argv[])
-{
+{//test
     for(int i=0; i < argc; ++i)
        {
            if(strncmp(argv[i], "-d", 2) == 0)
