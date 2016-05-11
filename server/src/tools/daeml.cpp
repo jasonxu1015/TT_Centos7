@@ -8,6 +8,7 @@
 #include <errno.h>
 
 /* closeall() -- close all FDs >= a specified value */
+/test/
 
 void closeall(int fd)
 {
