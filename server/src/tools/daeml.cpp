@@ -20,7 +20,6 @@ void closeall(int fd)
         close(fd++);
 }
 
-
 /* daemon() - detach process from user and disappear into the background
  * returns -1 on failure, but you can't do much except exit in that case
  * since we may already have forked. This is based on the BSD version,
