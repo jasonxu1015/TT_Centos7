@@ -16,7 +16,6 @@ void closeall(int fd)
     if (fdlimit > 128) {
         fdlimit = 128;
     }
-    
     while (fd < fdlimit)
         close(fd++);
 }
